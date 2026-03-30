@@ -402,7 +402,7 @@ function speak(text,rate){
 }
 function speakFlash(){
   if(!flashPool.length)return;
-  let w=words[flashPool[flashIdx%flashPool.length]];
+  let w=words[flashPool[flashIdx%flashPool.length-1]];
   if(w) speak(w.en);
 }
 function speakQuiz(){
