@@ -2191,12 +2191,16 @@
         save();
       }
 
-      // ★★★ FIXED nextQuiz: checks cycleComplete panel, not quizArea display
+      // ★★★ FIXED nextQuiz: only show cycle complete if queue truly empty AND we're in quiz mode AND cycle complete not already showing
       function nextQuiz() {
         let pool = getQuizWords();
         if (!pool.length) {
           document.getElementById("quizWord").textContent = "단어 없음";
           updateCycleUI();
+          return;
+        }
+        // Already showing cycle complete - don't call again
+        if (document.getElementById("cycleComplete").style.display === "block") {
           return;
         }
         // ★ KEY FIX: only show cycle complete if queue truly empty AND we're in quiz mode
@@ -2317,7 +2321,7 @@
       // ★★★ FIXED showCycleComplete: does NOT touch cycleNum (startNewCycle handles it)
       function showCycleComplete() {
         document.getElementById("quizArea").style.display = "none";
-        document.getElementById("cycleComplete").style.display = "";
+        document.getElementById("cycleComplete").style.display = "block";
         cycleCompleted++;
         document.getElementById("ccTitle").textContent =
           `사이클 ${quizCycleNum} 완료!`;
