@@ -1115,7 +1115,10 @@
                 <input
                   id="quizInput"
                   placeholder="정답 입력 후 Enter"
-                  onkeydown="if (event.key === 'Enter') checkText();"
+                  onkeyup="
+                    if (event.key === 'Enter' && !event.isComposing)
+                      checkText();
+                  "
                 />
                 <button class="btn" onclick="checkText()">확인</button>
               </div>
@@ -2200,7 +2203,9 @@
           return;
         }
         // Already showing cycle complete - don't call again
-        if (document.getElementById("cycleComplete").style.display === "block") {
+        if (
+          document.getElementById("cycleComplete").style.display === "block"
+        ) {
           return;
         }
         // ★ KEY FIX: only show cycle complete if queue truly empty AND we're in quiz mode
