@@ -54,7 +54,7 @@
         z-index: 0;
       }
       .app {
-        max-width: 900px;
+        max-width: 960px;
         margin: 0 auto;
         padding: 2rem 1rem;
         position: relative;
@@ -62,11 +62,11 @@
       }
       .header {
         text-align: center;
-        margin-bottom: 2.5rem;
+        margin-bottom: 2rem;
         animation: fadeUp 0.6s ease both;
       }
       .header h1 {
-        font-size: clamp(24px, 4vw, 36px);
+        font-size: clamp(22px, 4vw, 34px);
         font-weight: 700;
         letter-spacing: -0.03em;
         background: linear-gradient(135deg, #fff 30%, var(--accent2));
@@ -75,8 +75,8 @@
       }
       .header p {
         color: var(--text2);
-        font-size: 13px;
-        margin-top: 6px;
+        font-size: 12px;
+        margin-top: 5px;
         font-weight: 300;
         letter-spacing: 0.05em;
         text-transform: uppercase;
@@ -88,16 +88,16 @@
         border: 1px solid var(--border);
         border-radius: var(--r2);
         padding: 4px;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1.25rem;
       }
       .nav-btn {
         flex: 1;
-        padding: 9px 8px;
+        padding: 8px 6px;
         border: none;
         background: none;
         color: var(--text2);
         font-family: var(--sans);
-        font-size: 13px;
+        font-size: 12px;
         font-weight: 500;
         border-radius: 8px;
         cursor: pointer;
@@ -114,7 +114,7 @@
       }
       .panel {
         display: none;
-        animation: fadeUp 0.3s ease both;
+        animation: fadeUp 0.25s ease both;
       }
       .panel.active {
         display: block;
@@ -129,23 +129,16 @@
         margin-top: 12px;
       }
       .card-label {
-        font-size: 11px;
+        font-size: 10px;
         font-weight: 600;
         color: var(--text3);
         text-transform: uppercase;
-        letter-spacing: 0.1em;
+        letter-spacing: 0.12em;
         margin-bottom: 0.75rem;
       }
-      .grid2 {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-      }
-      .full {
-        grid-column: 1/-1;
-      }
       input,
-      textarea {
+      textarea,
+      select {
         width: 100%;
         padding: 9px 12px;
         border-radius: var(--r);
@@ -158,19 +151,24 @@
         transition: border-color 0.2s;
       }
       input:focus,
-      textarea:focus {
+      textarea:focus,
+      select:focus {
         border-color: var(--accent);
       }
       input::placeholder,
       textarea::placeholder {
         color: var(--text3);
       }
+      select option {
+        background: var(--surface2);
+      }
       .row {
         display: flex;
         gap: 8px;
         margin-bottom: 8px;
       }
-      .row input {
+      .row input,
+      .row select {
         flex: 1;
         min-width: 0;
       }
@@ -186,7 +184,6 @@
         cursor: pointer;
         transition: all 0.15s;
         white-space: nowrap;
-        letter-spacing: 0.01em;
       }
       .btn:hover {
         background: #3a7aee;
@@ -203,10 +200,15 @@
       .btn-ghost:hover {
         background: var(--surface2);
         color: var(--text);
+        transform: translateY(-1px);
+      }
+      .btn-sm {
+        padding: 5px 11px;
+        font-size: 12px;
       }
       .btn-danger {
         background: none;
-        border: 1px solid rgba(248, 113, 113, 0.2);
+        border: 1px solid rgba(248, 113, 113, 0.25);
         color: var(--red);
         font-size: 12px;
         padding: 4px 9px;
@@ -219,7 +221,7 @@
         background: none;
         border: none;
         color: var(--text2);
-        font-size: 16px;
+        font-size: 15px;
         cursor: pointer;
         padding: 2px 4px;
         transition: color 0.15s;
@@ -227,8 +229,53 @@
       .btn-icon:hover {
         color: var(--text);
       }
+
+      /* ── DECK SELECTOR ── */
+      .deck-bar {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+      }
+      .deck-bar select {
+        flex: 1;
+        min-width: 120px;
+      }
+      .deck-chips {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+      }
+      .deck-chip {
+        padding: 5px 12px;
+        border-radius: 20px;
+        border: 1px solid var(--border2);
+        background: none;
+        color: var(--text2);
+        font-size: 12px;
+        font-family: var(--sans);
+        cursor: pointer;
+        transition: all 0.15s;
+        white-space: nowrap;
+      }
+      .deck-chip.active {
+        background: var(--accent);
+        color: #fff;
+        border-color: var(--accent);
+      }
+      .deck-chip:hover:not(.active) {
+        background: var(--surface2);
+        color: var(--text);
+      }
+      .deck-chip-all {
+        border-style: dashed;
+      }
+
+      /* ── WORD LIST ── */
       .word-list {
-        max-height: 220px;
+        max-height: 240px;
         overflow-y: auto;
       }
       .word-list::-webkit-scrollbar {
@@ -246,6 +293,7 @@
         border-bottom: 1px solid var(--border);
         font-size: 13px;
         transition: background 0.15s;
+        gap: 8px;
       }
       .word-item:last-child {
         border-bottom: none;
@@ -259,7 +307,7 @@
       }
       .word-ko {
         color: var(--text2);
-        margin-left: 6px;
+        margin-left: 5px;
       }
       .w-actions {
         display: flex;
@@ -271,7 +319,7 @@
         font-size: 10px;
         font-weight: 600;
         font-family: var(--mono);
-        padding: 2px 7px;
+        padding: 2px 6px;
         border-radius: 4px;
         flex-shrink: 0;
       }
@@ -287,13 +335,24 @@
         background: rgba(79, 140, 255, 0.15);
         color: var(--accent2);
       }
+      .deck-tag {
+        font-size: 10px;
+        padding: 2px 6px;
+        border-radius: 4px;
+        background: var(--surface3);
+        color: var(--text3);
+        flex-shrink: 0;
+        font-family: var(--mono);
+      }
+
+      /* ── FLASHCARD ── */
       .flashcard-wrap {
         perspective: 800px;
-        margin: 1rem 0;
+        margin: 0.75rem 0;
       }
       .flashcard {
         width: 100%;
-        min-height: 160px;
+        min-height: 150px;
         border-radius: var(--r2);
         position: relative;
         transform-style: preserve-3d;
@@ -324,21 +383,21 @@
         transform: rotateY(180deg);
       }
       .fc-hint {
-        font-size: 11px;
+        font-size: 10px;
         color: var(--text3);
         text-transform: uppercase;
         letter-spacing: 0.1em;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.4rem;
         font-family: var(--mono);
       }
       .fc-word {
-        font-size: clamp(22px, 4vw, 32px);
+        font-size: clamp(20px, 4vw, 30px);
         font-weight: 600;
         text-align: center;
         color: var(--text);
       }
       .fc-meaning {
-        font-size: 18px;
+        font-size: 17px;
         color: var(--accent2);
         text-align: center;
       }
@@ -346,13 +405,14 @@
         display: flex;
         gap: 8px;
         justify-content: center;
-        margin-top: 12px;
+        margin-top: 10px;
+        flex-wrap: wrap;
       }
       .tts-btn {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        padding: 6px 12px;
+        gap: 5px;
+        padding: 6px 11px;
         border-radius: var(--r);
         border: 1px solid var(--border2);
         background: none;
@@ -368,19 +428,23 @@
         border-color: var(--accent);
       }
       .tts-btn svg {
-        width: 13px;
-        height: 13px;
+        width: 12px;
+        height: 12px;
         flex-shrink: 0;
       }
+
+      /* ── QUIZ ── */
       .cycle-bar {
         background: var(--surface2);
         border: 1px solid var(--border);
         border-radius: var(--r);
-        padding: 10px 14px;
-        margin-bottom: 12px;
+        padding: 9px 14px;
+        margin-bottom: 10px;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
       }
       .cycle-info {
         font-size: 13px;
@@ -402,7 +466,7 @@
         height: 3px;
         background: var(--surface3);
         border-radius: 2px;
-        margin-bottom: 14px;
+        margin-bottom: 12px;
         overflow: hidden;
       }
       .progress-fill {
@@ -414,11 +478,13 @@
       .quiz-tabs {
         display: flex;
         gap: 4px;
-        margin-bottom: 14px;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
       }
       .qtab {
         flex: 1;
-        padding: 7px 4px;
+        min-width: 80px;
+        padding: 6px 4px;
         font-size: 11px;
         font-weight: 600;
         text-align: center;
@@ -429,7 +495,6 @@
         cursor: pointer;
         transition: all 0.15s;
         font-family: var(--sans);
-        letter-spacing: 0.01em;
       }
       .qtab.active {
         background: var(--surface2);
@@ -442,23 +507,23 @@
         border-radius: var(--r2);
         padding: 1.5rem;
         text-align: center;
-        margin-bottom: 14px;
-        min-height: 100px;
+        margin-bottom: 12px;
+        min-height: 90px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 8px;
+        gap: 6px;
       }
       .quiz-label {
-        font-size: 11px;
+        font-size: 10px;
         color: var(--text3);
         text-transform: uppercase;
         letter-spacing: 0.1em;
         font-family: var(--mono);
       }
       .quiz-word {
-        font-size: clamp(18px, 3.5vw, 26px);
+        font-size: clamp(17px, 3.5vw, 25px);
         font-weight: 600;
         color: var(--text);
       }
@@ -469,7 +534,7 @@
         margin-bottom: 10px;
       }
       .mcq-btn {
-        padding: 11px 12px;
+        padding: 10px 12px;
         border-radius: var(--r);
         border: 1px solid var(--border2);
         background: var(--surface2);
@@ -514,35 +579,36 @@
       }
       .cycle-complete {
         text-align: center;
-        padding: 2rem 1rem;
+        padding: 1.75rem 1rem;
         display: none;
       }
       .cc-emoji {
-        font-size: 48px;
-        margin-bottom: 12px;
+        font-size: 44px;
+        margin-bottom: 10px;
         animation: bounce 0.6s ease;
       }
       .cc-title {
-        font-size: 20px;
+        font-size: 19px;
         font-weight: 700;
-        margin-bottom: 6px;
+        margin-bottom: 5px;
       }
       .cc-sub {
         color: var(--text2);
         font-size: 13px;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1.25rem;
       }
       .cc-stats {
         display: flex;
-        gap: 16px;
+        gap: 14px;
         justify-content: center;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1.25rem;
+        flex-wrap: wrap;
       }
       .cc-stat {
         text-align: center;
       }
       .cc-stat-val {
-        font-size: 24px;
+        font-size: 22px;
         font-weight: 700;
         font-family: var(--mono);
       }
@@ -552,21 +618,23 @@
         text-transform: uppercase;
         letter-spacing: 0.05em;
       }
+
+      /* ── STATS ── */
       .stats-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;
-        margin-bottom: 12px;
+        margin-bottom: 10px;
       }
       .stat-card {
         background: var(--surface2);
         border: 1px solid var(--border);
         border-radius: var(--r);
-        padding: 1rem;
+        padding: 0.9rem 1rem;
         text-align: center;
       }
       .stat-val {
-        font-size: 26px;
+        font-size: 24px;
         font-weight: 700;
         font-family: var(--mono);
         margin-bottom: 2px;
@@ -590,14 +658,14 @@
         color: var(--amber);
       }
       .history-list {
-        max-height: 180px;
+        max-height: 160px;
         overflow-y: auto;
       }
       .history-item {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 6px 4px;
+        padding: 5px 4px;
         border-bottom: 1px solid var(--border);
         font-size: 12px;
         font-family: var(--mono);
@@ -611,18 +679,19 @@
       .h-ng {
         color: var(--red);
       }
+
+      /* ── IMPORT ── */
       textarea {
         resize: vertical;
         min-height: 80px;
         font-family: var(--mono);
         font-size: 12px;
         line-height: 1.6;
-        padding: 10px 12px;
       }
       .import-hint {
         font-size: 11px;
         color: var(--text3);
-        margin-top: 6px;
+        margin-top: 5px;
         line-height: 1.6;
       }
       .search-wrap {
@@ -630,7 +699,7 @@
         margin-bottom: 10px;
       }
       .search-wrap input {
-        padding-left: 32px;
+        padding-left: 30px;
       }
       .search-icon {
         position: absolute;
@@ -638,12 +707,12 @@
         top: 50%;
         transform: translateY(-50%);
         color: var(--text3);
-        font-size: 14px;
+        font-size: 13px;
         pointer-events: none;
       }
       .diff-row {
         display: flex;
-        gap: 10px;
+        gap: 8px;
         align-items: center;
         flex-wrap: wrap;
         margin-bottom: 10px;
@@ -654,13 +723,54 @@
       }
       .diff-star {
         cursor: pointer;
-        font-size: 16px;
+        font-size: 15px;
         color: var(--text3);
         transition: color 0.15s;
       }
       .diff-star.on {
         color: var(--amber);
       }
+
+      /* ── DECK MANAGER ── */
+      .deck-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .deck-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 12px;
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: var(--r);
+        cursor: pointer;
+        transition: all 0.15s;
+        gap: 10px;
+      }
+      .deck-row:hover {
+        border-color: var(--border2);
+      }
+      .deck-row.selected {
+        border-color: var(--accent);
+        background: rgba(79, 140, 255, 0.05);
+      }
+      .deck-name {
+        font-weight: 500;
+        font-size: 14px;
+      }
+      .deck-meta {
+        font-size: 11px;
+        color: var(--text2);
+        font-family: var(--mono);
+      }
+      .deck-actions {
+        display: flex;
+        gap: 6px;
+        flex-shrink: 0;
+      }
+
       .toast {
         position: fixed;
         bottom: 24px;
@@ -676,15 +786,24 @@
         transform: translateY(10px);
         transition: all 0.25s;
         pointer-events: none;
+        max-width: 280px;
       }
       .toast.show {
         opacity: 1;
         transform: translateY(0);
       }
+
+      .empty-state {
+        text-align: center;
+        color: var(--text3);
+        padding: 1.5rem;
+        font-size: 13px;
+      }
+
       @keyframes fadeUp {
         from {
           opacity: 0;
-          transform: translateY(12px);
+          transform: translateY(10px);
         }
         to {
           opacity: 1;
@@ -697,16 +816,10 @@
           transform: scale(1);
         }
         50% {
-          transform: scale(1.2);
+          transform: scale(1.15);
         }
       }
-      @media (max-width: 600px) {
-        .grid2 {
-          grid-template-columns: 1fr;
-        }
-        .full {
-          grid-column: 1;
-        }
+      @media (max-width: 580px) {
         .mcq-grid {
           grid-template-columns: 1fr;
         }
@@ -715,7 +828,9 @@
         }
         .qtab {
           min-width: calc(50% - 4px);
-          flex: none;
+        }
+        .stats-grid {
+          grid-template-columns: 1fr;
         }
       }
     </style>
@@ -724,15 +839,16 @@
     <div class="app">
       <div class="header">
         <h1>WordMaster</h1>
-        <p>Spaced Cycle Learning System</p>
+        <p>Multi-Deck · Spaced Cycle Learning</p>
       </div>
 
       <nav class="nav">
-        <button class="nav-btn active" onclick="showPanel('words', this)">
+        <button class="nav-btn active" onclick="showPanel('decks', this)">
           단어장
         </button>
+        <button class="nav-btn" onclick="showPanel('words', this)">단어</button>
         <button class="nav-btn" onclick="showPanel('flash', this)">
-          플래시카드
+          플래시
         </button>
         <button class="nav-btn" onclick="showPanel('quiz', this)">퀴즈</button>
         <button class="nav-btn" onclick="showPanel('stats', this)">통계</button>
@@ -741,10 +857,34 @@
         </button>
       </nav>
 
-      <!-- 단어장 -->
-      <div id="panel-words" class="panel active">
+      <!-- ══ 단어장 관리 패널 ══ -->
+      <div id="panel-decks" class="panel active">
+        <div class="card">
+          <div class="card-label">단어장 만들기</div>
+          <div class="row">
+            <input
+              id="deckNameInput"
+              placeholder="단어장 이름 (예: TOEIC 파트5)"
+              onkeydown="if (event.key === 'Enter') createDeck();"
+            />
+            <button class="btn" onclick="createDeck()">만들기</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-label">내 단어장</div>
+          <div class="deck-list" id="deckList">
+            <div class="empty-state">단어장을 만들어보세요</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ 단어 패널 ══ -->
+      <div id="panel-words" class="panel">
         <div class="card">
           <div class="card-label">단어 추가</div>
+          <div class="row">
+            <select id="wordDeckSel" onchange="onWordDeckChange()"></select>
+          </div>
           <div class="row">
             <input
               id="inEn"
@@ -767,31 +907,34 @@
             <span class="diff-star" onclick="setNewDiff(2)" id="ns2">★</span>
             <span class="diff-star" onclick="setNewDiff(3)" id="ns3">★</span>
           </div>
+        </div>
+        <div class="card">
+          <div class="card-label">단어 목록</div>
+          <!-- 필터 -->
+          <div class="deck-chips" id="wordFilterChips"></div>
           <div class="search-wrap">
             <span class="search-icon">⌕</span>
-            <input id="search" placeholder="검색..." oninput="renderList()" />
+            <input
+              id="search"
+              placeholder="검색..."
+              oninput="renderWordList()"
+            />
           </div>
           <div class="word-list" id="list">
-            <div
-              style="
-                text-align: center;
-                color: var(--text3);
-                padding: 1.5rem;
-                font-size: 13px;
-              "
-            >
-              단어를 추가해보세요
-            </div>
+            <div class="empty-state">단어를 추가해보세요</div>
           </div>
         </div>
         <div class="card">
-          <div class="card-label">가져오기 — 한 줄에 하나: 영어,한국어</div>
+          <div class="card-label">가져오기 (영어,한국어 — 줄바꿈으로 구분)</div>
+          <div class="row" style="margin-bottom: 6px">
+            <select id="importDeckSel"></select>
+          </div>
           <textarea
             id="importText"
-            placeholder="apple,사과&#10;banana,바나나&#10;cherry,체리"
+            placeholder="apple,사과&#10;banana,바나나"
           ></textarea>
           <div class="import-hint">
-            쉼표(,) 또는 탭으로 구분. 여러 줄 붙여넣기 가능.
+            쉼표(,) 또는 탭으로 구분. # 으로 시작하는 줄은 무시.
           </div>
           <div
             style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap"
@@ -803,8 +946,8 @@
             <button class="btn btn-ghost" onclick="exportJSON()">
               JSON 백업
             </button>
-            <button class="btn btn-ghost" onclick="triggerImportFile()">
-              파일에서 가져오기
+            <button class="btn btn-ghost" onclick="triggerFileImport()">
+              파일 가져오기
             </button>
             <input
               type="file"
@@ -813,59 +956,45 @@
               style="display: none"
               onchange="importFromFile(event)"
             />
-            <button
-              class="btn btn-ghost"
-              style="
-                margin-left: auto;
-                color: var(--red);
-                border-color: rgba(248, 113, 113, 0.2);
-              "
-              onclick="clearAll()"
-            >
-              전체 삭제
-            </button>
           </div>
         </div>
       </div>
 
-      <!-- 플래시카드 -->
+      <!-- ══ 플래시카드 패널 ══ -->
       <div id="panel-flash" class="panel">
         <div class="card">
           <div class="card-label">플래시카드</div>
-          <div class="diff-row" style="margin-bottom: 14px">
-            <label>필터:</label>
+          <div
+            class="deck-chips"
+            id="flashDeckChips"
+            style="margin-bottom: 10px"
+          ></div>
+          <div class="diff-row">
+            <label>난이도 필터:</label>
             <button
-              class="btn btn-ghost"
-              style="
-                font-size: 11px;
-                padding: 4px 10px;
-                border-color: var(--accent);
-                color: var(--accent2);
-              "
+              class="btn btn-ghost btn-sm"
               onclick="setFlashFilter(0)"
               id="ff0"
+              style="border-color: var(--accent); color: var(--accent2)"
             >
               전체
             </button>
             <button
-              class="btn btn-ghost"
-              style="font-size: 11px; padding: 4px 10px"
+              class="btn btn-ghost btn-sm"
               onclick="setFlashFilter(1)"
               id="ff1"
             >
               ★
             </button>
             <button
-              class="btn btn-ghost"
-              style="font-size: 11px; padding: 4px 10px"
+              class="btn btn-ghost btn-sm"
               onclick="setFlashFilter(2)"
               id="ff2"
             >
               ★★
             </button>
             <button
-              class="btn btn-ghost"
-              style="font-size: 11px; padding: 4px 10px"
+              class="btn btn-ghost btn-sm"
               onclick="setFlashFilter(3)"
               id="ff3"
             >
@@ -877,11 +1006,12 @@
               <div class="fc-face fc-front">
                 <div class="fc-hint">클릭하여 뒤집기</div>
                 <div class="fc-word" id="fcWord">—</div>
-                <div id="fcDiff" style="margin-top: 8px"></div>
+                <div id="fcDiff" style="margin-top: 6px"></div>
               </div>
               <div class="fc-face fc-back">
                 <div class="fc-hint">뜻</div>
                 <div class="fc-meaning" id="fcMeaning">—</div>
+                <div id="fcDeckTag" style="margin-top: 8px"></div>
               </div>
             </div>
           </div>
@@ -898,8 +1028,9 @@
                   d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"
                 />
               </svg>
-              발음 듣기
+              발음
             </button>
+            <button class="tts-btn" onclick="prevFlash()">← 이전</button>
             <button class="tts-btn" onclick="nextFlash()">다음 →</button>
           </div>
           <div
@@ -914,9 +1045,17 @@
         </div>
       </div>
 
-      <!-- 퀴즈 -->
+      <!-- ══ 퀴즈 패널 ══ -->
       <div id="panel-quiz" class="panel">
         <div class="card">
+          <!-- 단어장 선택 -->
+          <div class="card-label">퀴즈 대상 단어장</div>
+          <div
+            class="deck-chips"
+            id="quizDeckChips"
+            style="margin-bottom: 12px"
+          ></div>
+
           <div class="cycle-bar">
             <div class="cycle-info">
               남은 문제: <strong id="cycleRemain">0</strong> /
@@ -931,6 +1070,7 @@
               style="width: 0%"
             ></div>
           </div>
+
           <div class="quiz-tabs">
             <button class="qtab active" id="qt0" onclick="setQMode(0)">
               영→한 단답
@@ -945,6 +1085,7 @@
               한→영 객관식
             </button>
           </div>
+
           <div id="quizArea">
             <div class="quiz-card">
               <div class="quiz-label" id="quizLabel">ENGLISH</div>
@@ -985,6 +1126,7 @@
               style="margin-top: 10px"
             ></div>
           </div>
+
           <div class="cycle-complete" id="cycleComplete">
             <div class="cc-emoji">🎉</div>
             <div class="cc-title" id="ccTitle">사이클 완료!</div>
@@ -1010,7 +1152,7 @@
         </div>
       </div>
 
-      <!-- 통계 -->
+      <!-- ══ 통계 패널 ══ -->
       <div id="panel-stats" class="panel">
         <div class="card">
           <div class="card-label">전체 통계</div>
@@ -1020,8 +1162,8 @@
               <div class="stat-label">총 단어</div>
             </div>
             <div class="stat-card">
-              <div class="stat-val val-blue" id="stCycles">0</div>
-              <div class="stat-label">완료 사이클</div>
+              <div class="stat-val val-blue" id="stDecks">0</div>
+              <div class="stat-label">단어장</div>
             </div>
             <div class="stat-card">
               <div class="stat-val val-green" id="stCorrect">0</div>
@@ -1032,44 +1174,26 @@
               <div class="stat-label">총 오답</div>
             </div>
           </div>
-          <div class="stat-card" style="text-align: center; margin-bottom: 0">
+          <div class="stat-card" style="text-align: center">
             <div class="stat-val val-amber" id="stAcc">—</div>
             <div class="stat-label">전체 정답률</div>
           </div>
         </div>
         <div class="card">
-          <div class="card-label">최근 퀴즈 기록</div>
+          <div class="card-label">최근 기록</div>
           <div class="history-list" id="historyList">
-            <div
-              style="
-                text-align: center;
-                color: var(--text3);
-                padding: 1rem;
-                font-size: 12px;
-              "
-            >
-              기록 없음
-            </div>
+            <div class="empty-state">기록 없음</div>
           </div>
         </div>
         <div class="card">
           <div class="card-label">단어별 정답률 (낮은 순)</div>
           <div class="word-list" id="wordStatsList">
-            <div
-              style="
-                text-align: center;
-                color: var(--text3);
-                padding: 1rem;
-                font-size: 12px;
-              "
-            >
-              단어를 추가하세요
-            </div>
+            <div class="empty-state">단어를 추가하세요</div>
           </div>
         </div>
       </div>
 
-      <!-- 설정 -->
+      <!-- ══ 설정 패널 ══ -->
       <div id="panel-settings" class="panel">
         <div class="card">
           <div class="card-label">퀴즈 설정</div>
@@ -1083,7 +1207,7 @@
                 color: var(--text2);
               "
             >
-              오답 시 바로 다음 문제로 재출제 방지
+              오답 시 바로 다음으로 재출제 방지
               <input
                 type="checkbox"
                 id="optNoImmediate"
@@ -1100,7 +1224,7 @@
                 color: var(--text2);
               "
             >
-              퀴즈 시 자동 발음 재생 (영→한)
+              퀴즈 시 자동 발음 재생
               <input
                 type="checkbox"
                 id="optAutoTTS"
@@ -1146,7 +1270,7 @@
           </div>
         </div>
         <div class="card">
-          <div class="card-label">데이터 관리</div>
+          <div class="card-label">데이터</div>
           <div style="display: flex; gap: 8px; flex-wrap: wrap">
             <button class="btn btn-ghost" onclick="exportCSV()">
               CSV 내보내기
@@ -1154,7 +1278,7 @@
             <button class="btn btn-ghost" onclick="exportJSON()">
               JSON 백업
             </button>
-            <button class="btn btn-ghost" onclick="triggerImportFile()">
+            <button class="btn btn-ghost" onclick="triggerFileImport()">
               파일 가져오기
             </button>
             <button
@@ -1168,6 +1292,17 @@
             >
               통계 초기화
             </button>
+            <button
+              class="btn"
+              style="
+                background: none;
+                border: 1px solid rgba(248, 113, 113, 0.3);
+                color: var(--red);
+              "
+              onclick="clearAll()"
+            >
+              전체 초기화
+            </button>
           </div>
         </div>
       </div>
@@ -1175,88 +1310,118 @@
     <div class="toast" id="toast"></div>
 
     <script>
-      let words = [],
-        correct = 0,
+      // ════════════════════════════════════════════
+      // DATA MODEL
+      // decks: [{id, name, createdAt}]
+      // words: [{id, deckId, en, ko, star, diff}]
+      // wordStats: {wordId: {correct, wrong}}
+      // quizState: {deckIds[], cycleNum, cycleQueue[], cycleTotalStart, cycleCorrect, cycleWrong}
+      // globals: correct, wrong, cycleCompleted, history[]
+      // ════════════════════════════════════════════
+
+      let decks = [];
+      let words = [];
+      let wordStats = {};
+      let correct = 0,
         wrong = 0,
-        cycleNum = 1,
         cycleCompleted = 0;
-      let cycleQueue = [],
-        cycleTotalStart = 0,
-        quizIdx = -1,
-        quizMode = 0,
-        mcqLocked = false;
-      let flashPool = [],
-        flashIdx = 0,
-        flashFilter = 0,
-        flashFlipped = false;
-      let newDiff = 1,
-        history = [],
-        wordStats = {},
-        cycleCorrect = 0,
-        cycleWrong = 0;
+      let history = [];
+
+      // Quiz state
+      let quizDeckIds = []; // which decks are active for quiz ([] = all)
+      let quizCycleNum = 1;
+      let quizQueue = []; // array of word IDs
+      let quizTotalStart = 0;
+      let quizCorrect = 0,
+        quizWrong = 0;
+      let quizCurrentId = null;
+      let quizMode = 0;
+      let mcqLocked = false;
+
+      // Flash state
+      let flashDeckId = null; // null = all
+      let flashFilter = 0;
+      let flashPool = [];
+      let flashPos = 0;
+      let flashFlipped = false;
+
+      // Word panel filter
+      let wordFilterDeckId = null; // null = all
+      let newDiff = 1;
+
+      // ── ID generator
+      let _idCounter = 0;
+      function genId() {
+        return Date.now().toString(36) + (++_idCounter).toString(36);
+      }
+
+      // ── Persist ──────────────────────────────────
+      function save() {
+        try {
+          localStorage.setItem("wm2_decks", JSON.stringify(decks));
+          localStorage.setItem("wm2_words", JSON.stringify(words));
+          localStorage.setItem("wm2_wordStats", JSON.stringify(wordStats));
+          localStorage.setItem("wm2_correct", correct);
+          localStorage.setItem("wm2_wrong", wrong);
+          localStorage.setItem("wm2_cycleCompleted", cycleCompleted);
+          localStorage.setItem(
+            "wm2_history",
+            JSON.stringify(history.slice(-300)),
+          );
+          localStorage.setItem(
+            "wm2_quizState",
+            JSON.stringify({
+              quizDeckIds,
+              quizCycleNum,
+              quizQueue,
+              quizTotalStart,
+              quizCorrect,
+              quizWrong,
+              quizCurrentId,
+              quizMode,
+            }),
+          );
+        } catch (e) {}
+      }
 
       function load() {
         try {
-          words = JSON.parse(localStorage.getItem("wm_words")) || [];
+          decks = JSON.parse(localStorage.getItem("wm2_decks")) || [];
         } catch (e) {}
         try {
-          correct = +localStorage.getItem("wm_correct") || 0;
+          words = JSON.parse(localStorage.getItem("wm2_words")) || [];
         } catch (e) {}
         try {
-          wrong = +localStorage.getItem("wm_wrong") || 0;
+          wordStats = JSON.parse(localStorage.getItem("wm2_wordStats")) || {};
         } catch (e) {}
         try {
-          cycleNum = +localStorage.getItem("wm_cycleNum") || 1;
+          correct = +localStorage.getItem("wm2_correct") || 0;
         } catch (e) {}
         try {
-          cycleCompleted = +localStorage.getItem("wm_cycleCompleted") || 0;
+          wrong = +localStorage.getItem("wm2_wrong") || 0;
         } catch (e) {}
         try {
-          cycleQueue = JSON.parse(localStorage.getItem("wm_queue")) || [];
+          cycleCompleted = +localStorage.getItem("wm2_cycleCompleted") || 0;
         } catch (e) {}
         try {
-          cycleTotalStart = +localStorage.getItem("wm_cycleTotalStart") || 0;
+          history = JSON.parse(localStorage.getItem("wm2_history")) || [];
         } catch (e) {}
         try {
-          history = JSON.parse(localStorage.getItem("wm_history")) || [];
-        } catch (e) {}
-        try {
-          wordStats = JSON.parse(localStorage.getItem("wm_wordStats")) || {};
-        } catch (e) {}
-      }
-      function save() {
-        try {
-          localStorage.setItem("wm_words", JSON.stringify(words));
-          localStorage.setItem("wm_correct", correct);
-          localStorage.setItem("wm_wrong", wrong);
-          localStorage.setItem("wm_cycleNum", cycleNum);
-          localStorage.setItem("wm_cycleCompleted", cycleCompleted);
-          localStorage.setItem("wm_queue", JSON.stringify(cycleQueue));
-          localStorage.setItem("wm_cycleTotalStart", cycleTotalStart);
-          localStorage.setItem(
-            "wm_history",
-            JSON.stringify(history.slice(-300)),
-          );
-          localStorage.setItem("wm_wordStats", JSON.stringify(wordStats));
+          let qs = JSON.parse(localStorage.getItem("wm2_quizState"));
+          if (qs) {
+            quizDeckIds = qs.quizDeckIds || [];
+            quizCycleNum = qs.quizCycleNum || 1;
+            quizQueue = qs.quizQueue || [];
+            quizTotalStart = qs.quizTotalStart || 0;
+            quizCorrect = qs.quizCorrect || 0;
+            quizWrong = qs.quizWrong || 0;
+            quizCurrentId = qs.quizCurrentId || null;
+            quizMode = qs.quizMode || 0;
+          }
         } catch (e) {}
       }
 
-      function showPanel(id, btn) {
-        document
-          .querySelectorAll(".panel")
-          .forEach((p) => p.classList.remove("active"));
-        document
-          .querySelectorAll(".nav-btn")
-          .forEach((b) => b.classList.remove("active"));
-        document.getElementById("panel-" + id).classList.add("active");
-        btn.classList.add("active");
-        if (id === "stats") renderStats();
-        if (id === "flash") {
-          rebuildFlashPool();
-          nextFlash();
-        }
-      }
-
+      // ── Toast ──────────────────────────────────
       function toast(msg, dur = 2200) {
         let t = document.getElementById("toast");
         t.textContent = msg;
@@ -1265,28 +1430,197 @@
         t._t = setTimeout(() => t.classList.remove("show"), dur);
       }
 
-      // ── TTS
-      function speak(text, rate) {
+      // ── Panel nav ──────────────────────────────
+      function showPanel(id, btn) {
+        document
+          .querySelectorAll(".panel")
+          .forEach((p) => p.classList.remove("active"));
+        document
+          .querySelectorAll(".nav-btn")
+          .forEach((b) => b.classList.remove("active"));
+        document.getElementById("panel-" + id).classList.add("active");
+        if (btn) btn.classList.add("active");
+        if (id === "decks") renderDeckList();
+        if (id === "words") {
+          renderWordDeckSelects();
+          renderWordFilterChips();
+          renderWordList();
+        }
+        if (id === "flash") {
+          renderFlashDeckChips();
+          rebuildFlashPool();
+          nextFlash();
+        }
+        if (id === "quiz") {
+          renderQuizDeckChips();
+        }
+        if (id === "stats") renderStats();
+      }
+
+      // ── TTS ────────────────────────────────────
+      function speak(text) {
         if (!window.speechSynthesis) return;
         speechSynthesis.cancel();
         let u = new SpeechSynthesisUtterance(text);
         u.lang = "en-US";
-        u.rate = rate || +document.getElementById("ttsRate").value || 0.9;
+        u.rate = +document.getElementById("ttsRate").value || 0.9;
         speechSynthesis.speak(u);
       }
       function speakFlash() {
-        if (!flashPool.length) return;
-        let w = words[flashPool[(flashIdx - 1) % flashPool.length]];
+        let w = flashPool[flashPos];
         if (w) speak(w.en);
       }
       function speakQuiz() {
-        if (quizIdx < 0 || !words[quizIdx]) return;
+        let w = getWordById(quizCurrentId);
+        if (!w) return;
         let isKoEn = quizMode === 1 || quizMode === 3;
-        if (!isKoEn) speak(words[quizIdx].en);
+        if (!isKoEn) speak(w.en);
         else toast("한국어 TTS는 지원되지 않습니다");
       }
 
-      // ── Difficulty
+      // ── Helpers ────────────────────────────────
+      function shuffle(arr) {
+        let a = arr.slice();
+        for (let i = a.length - 1; i > 0; i--) {
+          let j = Math.floor(Math.random() * (i + 1));
+          [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+      }
+      function getDeckById(id) {
+        return decks.find((d) => d.id === id);
+      }
+      function getWordById(id) {
+        return words.find((w) => w.id === id);
+      }
+      function wordsForDecks(deckIds) {
+        if (!deckIds || !deckIds.length) return words;
+        return words.filter((w) => deckIds.includes(w.deckId));
+      }
+
+      // ════════════════════════════════════════════
+      // DECK MANAGEMENT
+      // ════════════════════════════════════════════
+      function createDeck() {
+        let name = document.getElementById("deckNameInput").value.trim();
+        if (!name) {
+          toast("단어장 이름을 입력하세요");
+          return;
+        }
+        if (decks.find((d) => d.name === name)) {
+          toast("이미 같은 이름의 단어장이 있습니다");
+          return;
+        }
+        decks.push({ id: genId(), name, createdAt: Date.now() });
+        document.getElementById("deckNameInput").value = "";
+        save();
+        renderDeckList();
+        renderWordDeckSelects();
+        toast(`"${name}" 단어장 생성됨`);
+      }
+
+      function renameDeck(id) {
+        let d = getDeckById(id);
+        if (!d) return;
+        let newName = prompt("새 단어장 이름:", d.name);
+        if (!newName || !newName.trim()) return;
+        d.name = newName.trim();
+        save();
+        renderDeckList();
+        renderWordDeckSelects();
+        renderWordFilterChips();
+        renderFlashDeckChips();
+        renderQuizDeckChips();
+      }
+
+      function deleteDeck(id) {
+        let d = getDeckById(id);
+        if (!d) return;
+        let cnt = words.filter((w) => w.deckId === id).length;
+        if (!confirm(`"${d.name}" 단어장과 단어 ${cnt}개를 삭제할까요?`))
+          return;
+        decks = decks.filter((d) => d.id !== id);
+        let removed = words.filter((w) => w.deckId === id).map((w) => w.id);
+        words = words.filter((w) => w.deckId !== id);
+        removed.forEach((wid) => delete wordStats[wid]);
+        // clean quiz queue
+        quizQueue = quizQueue.filter((wid) => !removed.includes(wid));
+        save();
+        renderDeckList();
+        renderWordDeckSelects();
+        renderWordFilterChips();
+        renderWordList();
+        renderFlashDeckChips();
+        renderQuizDeckChips();
+        toast("단어장 삭제됨");
+      }
+
+      function renderDeckList() {
+        let el = document.getElementById("deckList");
+        if (!decks.length) {
+          el.innerHTML = '<div class="empty-state">단어장을 만들어보세요</div>';
+          return;
+        }
+        el.innerHTML = decks
+          .map((d) => {
+            let cnt = words.filter((w) => w.deckId === d.id).length;
+            let ws = words
+              .filter((w) => w.deckId === d.id)
+              .map((w) => wordStats[w.id] || { correct: 0, wrong: 0 });
+            let tot = ws.reduce((s, w) => s + w.correct + w.wrong, 0);
+            let cor = ws.reduce((s, w) => s + w.correct, 0);
+            let acc = tot ? Math.round((cor / tot) * 100) + "%" : "—";
+            return `<div class="deck-row">
+      <div style="min-width:0">
+        <div class="deck-name">${d.name}</div>
+        <div class="deck-meta">${cnt}개 단어 · 정답률 ${acc}</div>
+      </div>
+      <div class="deck-actions">
+        <button class="btn btn-ghost btn-sm" onclick="renameDeck('${d.id}')">이름 변경</button>
+        <button class="btn btn-danger" onclick="deleteDeck('${d.id}')">삭제</button>
+      </div>
+    </div>`;
+          })
+          .join("");
+      }
+
+      // ── Deck selects (word panel) ──────────────
+      function renderWordDeckSelects() {
+        let opts = decks
+          .map((d) => `<option value="${d.id}">${d.name}</option>`)
+          .join("");
+        let placeholder = decks.length
+          ? ""
+          : '<option value="">단어장 없음</option>';
+        document.getElementById("wordDeckSel").innerHTML = placeholder + opts;
+        document.getElementById("importDeckSel").innerHTML = placeholder + opts;
+      }
+
+      function onWordDeckChange() {
+        /* nothing needed */
+      }
+
+      // ── Word filter chips ──────────────────────
+      function renderWordFilterChips() {
+        let el = document.getElementById("wordFilterChips");
+        let chips = `<button class="deck-chip deck-chip-all ${wordFilterDeckId === null ? "active" : ""}" onclick="setWordFilter(null)">전체</button>`;
+        chips += decks
+          .map(
+            (d) =>
+              `<button class="deck-chip ${wordFilterDeckId === d.id ? "active" : ""}" onclick="setWordFilter('${d.id}')">${d.name}</button>`,
+          )
+          .join("");
+        el.innerHTML = chips;
+      }
+      function setWordFilter(id) {
+        wordFilterDeckId = id;
+        renderWordFilterChips();
+        renderWordList();
+      }
+
+      // ════════════════════════════════════════════
+      // WORD MANAGEMENT
+      // ════════════════════════════════════════════
       function setNewDiff(d) {
         newDiff = d;
         [1, 2, 3].forEach((i) =>
@@ -1294,7 +1628,6 @@
         );
       }
 
-      // ── Add word
       function addWord() {
         let en = document.getElementById("inEn").value.trim();
         let ko = document.getElementById("inKo").value.trim();
@@ -1302,61 +1635,68 @@
           toast("단어와 뜻을 입력하세요");
           return;
         }
-        let idx = words.length;
-        words.push({ en, ko, star: false, diff: newDiff });
+        if (!decks.length) {
+          toast("먼저 단어장을 만드세요");
+          return;
+        }
+        let deckId = document.getElementById("wordDeckSel").value;
+        if (!deckId) {
+          toast("단어장을 선택하세요");
+          return;
+        }
+        let wid = genId();
+        words.push({ id: wid, deckId, en, ko, star: false, diff: newDiff });
         document.getElementById("inEn").value = "";
         document.getElementById("inKo").value = "";
-        if (cycleQueue.length > 0) {
-          let pos = Math.floor(Math.random() * cycleQueue.length) + 1;
-          cycleQueue.splice(pos, 0, idx);
-          cycleTotalStart++;
-        }
+        document.getElementById("inEn").focus();
+        // Add to quiz queue if this deck is active
+        addToQuizQueue(wid);
         save();
-        renderList();
-        updateCycleUI();
-        if (words.length === 1) {
-          startNewCycle();
-          rebuildFlashPool();
-          nextFlash();
-        }
+        renderWordList();
         toast(`"${en}" 추가됨`);
       }
 
-      function deleteWord(i) {
-        words.splice(i, 1);
-        cycleQueue = cycleQueue
-          .filter((x) => x !== i)
-          .map((x) => (x > i ? x - 1 : x));
-        if (quizIdx === i) quizIdx = -1;
-        else if (quizIdx > i) quizIdx--;
-        cycleTotalStart = Math.max(0, cycleTotalStart - 1);
-        let ns = {};
-        Object.keys(wordStats).forEach((k) => {
-          let ki = +k;
-          if (ki === i) return;
-          ns[ki > i ? ki - 1 : ki] = wordStats[k];
-        });
-        wordStats = ns;
-        save();
-        renderList();
-        updateCycleUI();
+      function addToQuizQueue(wid) {
+        let w = getWordById(wid);
+        if (!w) return;
+        let active = quizDeckIds.length === 0 || quizDeckIds.includes(w.deckId);
+        if (active && quizQueue.length > 0) {
+          let pos = Math.floor(Math.random() * quizQueue.length) + 1;
+          quizQueue.splice(pos, 0, wid);
+          quizTotalStart++;
+        }
       }
 
-      function toggleStar(i) {
-        words[i].star = !words[i].star;
+      function deleteWord(id) {
+        words = words.filter((w) => w.id !== id);
+        delete wordStats[id];
+        quizQueue = quizQueue.filter((wid) => wid !== id);
+        if (quizCurrentId === id) quizCurrentId = null;
         save();
-        renderList();
+        renderWordList();
       }
 
-      function renderList() {
+      function toggleStar(id) {
+        let w = getWordById(id);
+        if (w) {
+          w.star = !w.star;
+          save();
+          renderWordList();
+        }
+      }
+
+      function renderWordList() {
         let q = document.getElementById("search").value.toLowerCase();
         let el = document.getElementById("list");
-        let inQueue = new Set(cycleQueue);
-        let items = words
-          .map((w, i) => ({ ...w, i }))
-          .filter((w) => w.en.toLowerCase().includes(q) || w.ko.includes(q));
+        let inQueue = new Set(quizQueue);
+        let pool = wordFilterDeckId
+          ? words.filter((w) => w.deckId === wordFilterDeckId)
+          : words;
+        let items = pool.filter(
+          (w) => w.en.toLowerCase().includes(q) || w.ko.includes(q),
+        );
         if (!items.length) {
-          el.innerHTML = `<div style="text-align:center;color:var(--text3);padding:1.5rem;font-size:13px">${words.length ? "검색 결과 없음" : "단어를 추가해보세요"}</div>`;
+          el.innerHTML = `<div class="empty-state">${words.length ? "검색 결과 없음" : "단어를 추가해보세요"}</div>`;
           return;
         }
         el.innerHTML = items
@@ -1369,44 +1709,34 @@
                   ? "var(--amber)"
                   : "var(--green)";
             let status =
-              w.i === quizIdx
+              w.id === quizCurrentId
                 ? `<span class="status-dot dot-current">▶ 현재</span>`
-                : inQueue.has(w.i)
+                : inQueue.has(w.id)
                   ? `<span class="status-dot dot-pending">● 대기</span>`
                   : `<span class="status-dot dot-done">✓ 완료</span>`;
-            let ws = wordStats[w.i] || { correct: 0, wrong: 0 };
+            let ws = wordStats[w.id] || { correct: 0, wrong: 0 };
             let tot = ws.correct + ws.wrong;
             let acc = tot ? Math.round((ws.correct / tot) * 100) + "%" : "—";
+            let deck = getDeckById(w.deckId);
+            let deckName = deck ? deck.name : "?";
             return `<div class="word-item">
-      <div style="min-width:0">
+      <div style="min-width:0;flex:1">
         <div><span class="word-en">${w.en}</span><span class="word-ko">| ${w.ko}</span></div>
-        <div style="font-size:10px;font-family:var(--mono);color:var(--text3);margin-top:2px">${acc} 정답률</div>
+        <div style="font-size:10px;font-family:var(--mono);color:var(--text3);margin-top:2px">${acc} · ${deckName}</div>
       </div>
       <div class="w-actions">
         ${status}
         <span style="font-size:11px;color:${sc};font-family:var(--mono)">${stars}</span>
-        <button class="btn-icon" onclick="toggleStar(${w.i})">${w.star ? "⭐" : "☆"}</button>
-        <button class="btn btn-danger" onclick="deleteWord(${w.i})">삭제</button>
+        <button class="btn-icon" onclick="toggleStar('${w.id}')">${w.star ? "⭐" : "☆"}</button>
+        <button class="btn btn-danger" onclick="deleteWord('${w.id}')">삭제</button>
       </div>
     </div>`;
           })
           .join("");
       }
 
-      // ── Import / Export
-      function importWords() {
-        let text = document.getElementById("importText").value.trim();
-        if (!text) return;
-        let added = parseAndAddLines(text);
-        document.getElementById("importText").value = "";
-        save();
-        renderList();
-        updateCycleUI();
-        toast(`${added}개 단어 추가됨`);
-        if (words.length === added) startNewCycle();
-      }
-
-      function parseAndAddLines(text) {
+      // ── Import / Export ────────────────────────
+      function parseAndAddLines(text, deckId) {
         let lines = text
           .split("\n")
           .map((l) => l.trim())
@@ -1419,38 +1749,56 @@
           let en = parts[0].trim(),
             ko = parts[1].trim();
           if (!en || !ko) return;
-          let idx = words.length;
-          words.push({ en, ko, star: false, diff: 1 });
-          let pos =
-            cycleQueue.length > 0
-              ? Math.floor(Math.random() * cycleQueue.length) + 1
-              : 0;
-          cycleQueue.splice(pos, 0, idx);
-          cycleTotalStart++;
+          let wid = genId();
+          words.push({ id: wid, deckId, en, ko, star: false, diff: 1 });
+          addToQuizQueue(wid);
           added++;
         });
         return added;
       }
 
+      function importWords() {
+        let text = document.getElementById("importText").value.trim();
+        if (!text) return;
+        if (!decks.length) {
+          toast("먼저 단어장을 만드세요");
+          return;
+        }
+        let deckId = document.getElementById("importDeckSel").value;
+        if (!deckId) {
+          toast("단어장을 선택하세요");
+          return;
+        }
+        let added = parseAndAddLines(text, deckId);
+        document.getElementById("importText").value = "";
+        if (!quizQueue.length && added) initQuizQueue();
+        save();
+        renderWordList();
+        toast(`${added}개 단어 추가됨`);
+      }
+
       function exportCSV() {
-        let text =
-          "# WordMaster export\n# 영어,한국어\n" +
-          words.map((w) => `${w.en},${w.ko}`).join("\n");
-        copyToClipboard(text, "CSV 복사됨 (붙여넣기 후 .csv로 저장 가능)");
+        let lines = ["# WordMaster export", "# 단어장,영어,한국어"];
+        words.forEach((w) => {
+          let d = getDeckById(w.deckId);
+          lines.push(`${d ? d.name : ""},${w.en},${w.ko}`);
+        });
+        copyText(lines.join("\n"), "CSV 복사됨");
       }
 
       function exportJSON() {
         let data = {
-          version: 1,
+          version: 2,
+          decks,
           words,
           stats: { correct, wrong, cycleCompleted },
           wordStats,
           exportedAt: new Date().toISOString(),
         };
-        copyToClipboard(JSON.stringify(data, null, 2), "JSON 백업 복사됨");
+        copyText(JSON.stringify(data, null, 2), "JSON 백업 복사됨");
       }
 
-      function copyToClipboard(text, msg) {
+      function copyText(text, msg) {
         if (navigator.clipboard) {
           navigator.clipboard
             .writeText(text)
@@ -1469,13 +1817,20 @@
         toast(msg);
       }
 
-      function triggerImportFile() {
+      function triggerFileImport() {
         document.getElementById("fileInput").click();
       }
 
       function importFromFile(event) {
         let file = event.target.files[0];
         if (!file) return;
+        if (!decks.length) {
+          toast("먼저 단어장을 만드세요");
+          return;
+        }
+        let deckId =
+          document.getElementById("importDeckSel").value ||
+          (decks[0] && decks[0].id);
         let reader = new FileReader();
         reader.onload = (e) => {
           let text = e.target.result;
@@ -1483,22 +1838,47 @@
           if (file.name.endsWith(".json")) {
             try {
               let data = JSON.parse(text);
-              if (data.words && Array.isArray(data.words)) {
-                data.words.forEach((w) => {
-                  if (!w.en || !w.ko) return;
-                  let idx = words.length;
+              // version 2 (multi-deck)
+              if (data.version === 2 && data.decks) {
+                let idMap = {};
+                data.decks.forEach((d) => {
+                  let existing = decks.find((x) => x.name === d.name);
+                  if (!existing) {
+                    let nd = {
+                      id: genId(),
+                      name: d.name,
+                      createdAt: d.createdAt || Date.now(),
+                    };
+                    decks.push(nd);
+                    idMap[d.id] = nd.id;
+                  } else idMap[d.id] = existing.id;
+                });
+                (data.words || []).forEach((w) => {
+                  let wid = genId();
                   words.push({
+                    id: wid,
+                    deckId: idMap[w.deckId] || deckId,
                     en: w.en,
                     ko: w.ko,
                     star: w.star || false,
                     diff: w.diff || 1,
                   });
-                  let pos =
-                    cycleQueue.length > 0
-                      ? Math.floor(Math.random() * cycleQueue.length) + 1
-                      : 0;
-                  cycleQueue.splice(pos, 0, idx);
-                  cycleTotalStart++;
+                  addToQuizQueue(wid);
+                  added++;
+                });
+              } else if (data.words) {
+                // version 1 (single-deck, legacy)
+                data.words.forEach((w) => {
+                  let wid = genId();
+                  words.push({
+                    id: wid,
+                    deckId,
+                    en: w.en,
+                    ko: w.ko,
+                    star: w.star || false,
+                    diff: w.diff || 1,
+                  });
+                  addToQuizQueue(wid);
                   added++;
                 });
               }
@@ -1507,55 +1887,126 @@
               return;
             }
           } else {
-            added = parseAndAddLines(text);
+            // CSV/TXT — check if has deck column
+            let lines = text
+              .split("\n")
+              .map((l) => l.trim())
+              .filter(Boolean)
+              .filter((l) => !l.startsWith("#"));
+            let hasDeckCol = lines[0] && lines[0].split(",").length >= 3;
+            lines.forEach((line) => {
+              let parts = line.includes("\t")
+                ? line.split("\t")
+                : line.split(",");
+              if (hasDeckCol && parts.length >= 3) {
+                let dname = parts[0].trim(),
+                  en = parts[1].trim(),
+                  ko = parts[2].trim();
+                if (!en || !ko) return;
+                let deck =
+                  decks.find((d) => d.name === dname) ||
+                  (() => {
+                    let nd = {
+                      id: genId(),
+                      name: dname,
+                      createdAt: Date.now(),
+                    };
+                    decks.push(nd);
+                    return nd;
+                  })();
+                let wid = genId();
+                words.push({
+                  id: wid,
+                  deckId: deck.id,
+                  en,
+                  ko,
+                  star: false,
+                  diff: 1,
+                });
+                addToQuizQueue(wid);
+                added++;
+              } else if (parts.length >= 2) {
+                let en = parts[0].trim(),
+                  ko = parts[1].trim();
+                if (!en || !ko) return;
+                let wid = genId();
+                words.push({ id: wid, deckId, en, ko, star: false, diff: 1 });
+                addToQuizQueue(wid);
+                added++;
+              }
+            });
           }
+          if (!quizQueue.length && added) initQuizQueue();
           save();
-          renderList();
-          updateCycleUI();
+          renderDeckList();
+          renderWordDeckSelects();
+          renderWordFilterChips();
+          renderWordList();
+          renderFlashDeckChips();
+          renderQuizDeckChips();
           toast(`${added}개 단어 가져옴`);
-          if (words.length === added) startNewCycle();
         };
         reader.readAsText(file, "UTF-8");
         event.target.value = "";
       }
 
       function clearAll() {
-        if (!confirm("모든 단어와 통계를 삭제할까요?")) return;
+        if (!confirm("모든 데이터를 삭제할까요?")) return;
+        decks = [];
         words = [];
-        cycleQueue = [];
-        cycleTotalStart = 0;
-        cycleNum = 1;
-        cycleCompleted = 0;
+        wordStats = {};
         correct = 0;
         wrong = 0;
+        cycleCompleted = 0;
         history = [];
-        wordStats = {};
-        cycleCorrect = 0;
-        cycleWrong = 0;
+        quizDeckIds = [];
+        quizCycleNum = 1;
+        quizQueue = [];
+        quizTotalStart = 0;
+        quizCorrect = 0;
+        quizWrong = 0;
+        quizCurrentId = null;
         save();
-        renderList();
-        updateCycleUI();
-        updateStats();
+        renderDeckList();
+        renderWordDeckSelects();
+        renderWordFilterChips();
+        renderWordList();
+        renderFlashDeckChips();
+        renderQuizDeckChips();
         toast("초기화 완료");
       }
+
       function resetStats() {
         if (!confirm("통계를 초기화할까요?")) return;
         correct = 0;
         wrong = 0;
+        cycleCompleted = 0;
         history = [];
         wordStats = {};
-        cycleCompleted = 0;
         save();
         toast("통계 초기화됨");
       }
 
-      // ── Flashcard
-      function shuffle(arr) {
-        for (let i = arr.length - 1; i > 0; i--) {
-          let j = Math.floor(Math.random() * (i + 1));
-          [arr[i], arr[j]] = [arr[j], arr[i]];
-        }
-        return arr;
+      // ════════════════════════════════════════════
+      // FLASHCARD
+      // ════════════════════════════════════════════
+      function renderFlashDeckChips() {
+        let el = document.getElementById("flashDeckChips");
+        let chips = `<button class="deck-chip deck-chip-all ${flashDeckId === null ? "active" : ""}" onclick="setFlashDeck(null)">전체</button>`;
+        chips += decks
+          .map(
+            (d) =>
+              `<button class="deck-chip ${flashDeckId === d.id ? "active" : ""}" onclick="setFlashDeck('${d.id}')">${d.name}</button>`,
+          )
+          .join("");
+        el.innerHTML = chips;
+      }
+
+      function setFlashDeck(id) {
+        flashDeckId = id;
+        renderFlashDeckChips();
+        rebuildFlashPool();
+        nextFlash();
       }
 
       function setFlashFilter(f) {
@@ -1568,26 +2019,31 @@
         rebuildFlashPool();
         nextFlash();
       }
+
       function rebuildFlashPool() {
-        flashPool = words
-          .map((_, i) => i)
-          .filter(
-            (i) => flashFilter === 0 || (words[i].diff || 1) === flashFilter,
-          );
-        shuffle(flashPool);
-        flashIdx = 0;
+        let pool = flashDeckId
+          ? words.filter((w) => w.deckId === flashDeckId)
+          : words;
+        if (flashFilter > 0)
+          pool = pool.filter((w) => (w.diff || 1) === flashFilter);
+        flashPool = shuffle(pool);
+        flashPos = 0;
       }
+
       function nextFlash() {
         if (!flashPool.length) {
           document.getElementById("fcWord").textContent = "단어 없음";
           document.getElementById("fcMeaning").textContent = "—";
           document.getElementById("fcCounter").textContent = "";
+          document.getElementById("fcDiff").innerHTML = "";
+          document.getElementById("fcDeckTag").innerHTML = "";
           return;
         }
         flashFlipped = false;
         document.getElementById("flashcard").classList.remove("flipped");
-        let idx = flashPool[flashIdx % flashPool.length];
-        let w = words[idx];
+        flashPos =
+          ((flashPos % flashPool.length) + flashPool.length) % flashPool.length;
+        let w = flashPool[flashPos];
         document.getElementById("fcWord").textContent = w.en;
         document.getElementById("fcMeaning").textContent = w.ko;
         let sc =
@@ -1597,12 +2053,22 @@
               ? "var(--amber)"
               : "var(--green)";
         document.getElementById("fcDiff").innerHTML =
-          `<span style="font-size:13px;color:${sc}">${"★".repeat(w.diff || 1)}</span>`;
+          `<span style="font-size:12px;color:${sc}">${"★".repeat(w.diff || 1)}</span>`;
+        let deck = getDeckById(w.deckId);
+        document.getElementById("fcDeckTag").innerHTML = deck
+          ? `<span class="deck-tag">${deck.name}</span>`
+          : "";
         document.getElementById("fcCounter").textContent =
-          `${(flashIdx % flashPool.length) + 1} / ${flashPool.length}`;
-        flashIdx++;
+          `${flashPos + 1} / ${flashPool.length}`;
+        flashPos++;
         if (document.getElementById("optAutoTTS").checked) speak(w.en);
       }
+
+      function prevFlash() {
+        flashPos = Math.max(0, flashPos - 2);
+        nextFlash();
+      }
+
       function flipCard() {
         flashFlipped = !flashFlipped;
         document
@@ -1610,39 +2076,91 @@
           .classList.toggle("flipped", flashFlipped);
       }
 
-      // ── Cycle
-      function startNewCycle() {
-        if (!words.length) return;
-        cycleQueue = shuffle(words.map((_, i) => i));
-        cycleTotalStart = cycleQueue.length;
-        cycleCorrect = 0;
-        cycleWrong = 0;
+      // ════════════════════════════════════════════
+      // QUIZ + CYCLE  (BUG-FIXED)
+      // ════════════════════════════════════════════
+
+      function renderQuizDeckChips() {
+        let el = document.getElementById("quizDeckChips");
+        let chips = `<button class="deck-chip deck-chip-all ${quizDeckIds.length === 0 ? "active" : ""}" onclick="setQuizDecks([])">전체</button>`;
+        chips += decks
+          .map((d) => {
+            let active = quizDeckIds.includes(d.id);
+            return `<button class="deck-chip ${active ? "active" : ""}" onclick="toggleQuizDeck('${d.id}')">${d.name}</button>`;
+          })
+          .join("");
+        el.innerHTML = chips;
+      }
+
+      function setQuizDecks(ids) {
+        quizDeckIds = ids;
+        renderQuizDeckChips();
+        initQuizQueue();
+      }
+
+      function toggleQuizDeck(id) {
+        if (quizDeckIds.includes(id)) {
+          quizDeckIds = quizDeckIds.filter((x) => x !== id);
+          if (!quizDeckIds.length) quizDeckIds = []; // means all
+        } else {
+          quizDeckIds.push(id);
+        }
+        renderQuizDeckChips();
+        initQuizQueue();
+      }
+
+      function getQuizWords() {
+        return quizDeckIds.length === 0
+          ? words
+          : words.filter((w) => quizDeckIds.includes(w.deckId));
+      }
+
+      // Build a brand-new queue from scratch (resets cycle)
+      function initQuizQueue() {
+        let pool = getQuizWords();
+        if (!pool.length) {
+          quizQueue = [];
+          quizTotalStart = 0;
+          updateCycleUI();
+          return;
+        }
+        quizQueue = shuffle(pool.map((w) => w.id));
+        quizTotalStart = quizQueue.length;
+        quizCorrect = 0;
+        quizWrong = 0;
+        // reset UI
         document.getElementById("cycleComplete").style.display = "none";
         document.getElementById("quizArea").style.display = "";
         save();
         nextQuiz();
       }
+
+      // ★★★ FIXED: startNewCycle — only increments cycleNum ONCE, rebuilds queue, then calls nextQuiz
+      function startNewCycle() {
+        let pool = getQuizWords();
+        if (!pool.length) return;
+        quizCycleNum++;
+        quizQueue = shuffle(pool.map((w) => w.id));
+        quizTotalStart = quizQueue.length;
+        quizCorrect = 0;
+        quizWrong = 0;
+        document.getElementById("cycleComplete").style.display = "none";
+        document.getElementById("quizArea").style.display = "";
+        save();
+        nextQuiz(); // queue is non-empty so will NOT trigger showCycleComplete
+      }
+
       function updateCycleUI() {
-        let remain = cycleQueue.length,
-          total = cycleTotalStart || words.length;
+        let remain = quizQueue.length;
+        let total = quizTotalStart || getQuizWords().length;
         document.getElementById("cycleRemain").textContent = remain;
         document.getElementById("cycleTotal").textContent = total;
-        document.getElementById("cycleTag").textContent = "CYCLE " + cycleNum;
+        document.getElementById("cycleTag").textContent =
+          "CYCLE " + quizCycleNum;
         let pct = total > 0 ? Math.round(((total - remain) / total) * 100) : 0;
         document.getElementById("progressFill").style.width = pct + "%";
       }
-      function updateStats() {
-        document.getElementById("stTotal").textContent = words.length;
-        document.getElementById("stCycles").textContent = cycleCompleted;
-        document.getElementById("stCorrect").textContent = correct;
-        document.getElementById("stWrong").textContent = wrong;
-        let t = correct + wrong;
-        document.getElementById("stAcc").textContent = t
-          ? Math.round((correct / t) * 100) + "%"
-          : "—";
-      }
 
-      // ── Quiz
       function setQMode(m) {
         quizMode = m;
         [0, 1, 2, 3].forEach((i) =>
@@ -1654,36 +2172,46 @@
           : "none";
         document.getElementById("textArea").style.display = isMcq ? "none" : "";
         document.getElementById("quizResult").textContent = "";
-        if (quizIdx >= 0) {
+        if (quizCurrentId) {
           let isKoEn = m === 1 || m === 3;
-          if (isMcq) renderMcq(isKoEn);
-          else {
+          let w = getWordById(quizCurrentId);
+          if (w) {
             document.getElementById("quizLabel").textContent = isKoEn
               ? "KOREAN"
               : "ENGLISH";
             document.getElementById("quizWord").textContent = isKoEn
-              ? words[quizIdx].ko
-              : words[quizIdx].en;
+              ? w.ko
+              : w.en;
+            document.getElementById("quizTtsBtn").style.display = isKoEn
+              ? "none"
+              : "";
           }
-          document.getElementById("quizTtsBtn").style.display = isKoEn
-            ? "none"
-            : "";
+          if (isMcq) renderMcq(isKoEn);
         }
+        save();
       }
+
+      // ★★★ FIXED nextQuiz: checks cycleComplete panel, not quizArea display
       function nextQuiz() {
-        if (!words.length) {
-          document.getElementById("quizWord").textContent = "—";
+        let pool = getQuizWords();
+        if (!pool.length) {
+          document.getElementById("quizWord").textContent = "단어 없음";
+          updateCycleUI();
           return;
         }
-        if (!cycleQueue.length) {
-          // 큐가 비어있는데 quizArea가 보이는 상태일 때만 완료 처리
-          if (document.getElementById("quizArea").style.display !== "none")
-            showCycleComplete();
+        // ★ KEY FIX: only show cycle complete if queue truly empty AND we're in quiz mode
+        if (quizQueue.length === 0) {
+          showCycleComplete();
           return;
         }
         mcqLocked = false;
-        quizIdx = cycleQueue[0];
-        let w = words[quizIdx];
+        quizCurrentId = quizQueue[0];
+        let w = getWordById(quizCurrentId);
+        if (!w) {
+          quizQueue.shift();
+          nextQuiz();
+          return;
+        } // skip deleted words
         let isKoEn = quizMode === 1 || quizMode === 3;
         document.getElementById("quizLabel").textContent = isKoEn
           ? "KOREAN"
@@ -1697,22 +2225,25 @@
         if (inp) inp.value = "";
         if (quizMode >= 2) renderMcq(isKoEn);
         updateCycleUI();
-        renderList();
+        renderWordList();
         if (document.getElementById("optAutoTTS").checked && !isKoEn)
           speak(w.en);
       }
+
       function renderMcq(isKoEn) {
-        let w = words[quizIdx];
+        let w = getWordById(quizCurrentId);
+        if (!w) return;
         let ca = isKoEn ? w.en : w.ko;
-        let pool = words.filter((_, i) => i !== quizIdx);
+        let pool = getQuizWords().filter((x) => x.id !== quizCurrentId);
+        if (pool.length < 3) pool = words.filter((x) => x.id !== quizCurrentId); // fallback to all
         let opts = [ca];
-        while (opts.length < 4 && pool.length) {
-          let ri = Math.floor(Math.random() * pool.length);
-          let cand = isKoEn ? pool[ri].en : pool[ri].ko;
+        let shuffled = shuffle(pool);
+        for (let x of shuffled) {
+          if (opts.length >= 4) break;
+          let cand = isKoEn ? x.en : x.ko;
           if (!opts.includes(cand)) opts.push(cand);
-          pool.splice(ri, 1);
         }
-        opts.sort(() => Math.random() - 0.5);
+        opts = shuffle(opts);
         document.getElementById("mcqArea").innerHTML = opts
           .map(
             (o) =>
@@ -1720,31 +2251,34 @@
           )
           .join("");
       }
+
       function recordResult(ok) {
-        let w = words[quizIdx];
-        if (!wordStats[quizIdx]) wordStats[quizIdx] = { correct: 0, wrong: 0 };
+        let w = getWordById(quizCurrentId);
+        if (!w) return;
+        if (!wordStats[quizCurrentId])
+          wordStats[quizCurrentId] = { correct: 0, wrong: 0 };
         if (ok) {
           correct++;
-          cycleCorrect++;
-          wordStats[quizIdx].correct++;
-          cycleQueue.shift();
+          quizCorrect++;
+          wordStats[quizCurrentId].correct++;
+          quizQueue.shift(); // ★ correct: remove from queue
         } else {
           wrong++;
-          cycleWrong++;
-          wordStats[quizIdx].wrong++;
-          cycleQueue.shift();
-          let ni = document.getElementById("optNoImmediate").checked;
-          let min = ni ? 1 : 0;
-          let pos =
-            cycleQueue.length > min
-              ? Math.floor(Math.random() * (cycleQueue.length - min)) + min
-              : cycleQueue.length;
-          cycleQueue.splice(pos, 0, quizIdx);
+          quizWrong++;
+          wordStats[quizCurrentId].wrong++;
+          quizQueue.shift(); // remove from front
+          // re-insert further back (not immediately next)
+          let noImmediate = document.getElementById("optNoImmediate").checked;
+          let minPos = noImmediate ? Math.min(1, quizQueue.length) : 0;
+          let maxPos = quizQueue.length;
+          let pos = minPos + Math.floor(Math.random() * (maxPos - minPos + 1));
+          quizQueue.splice(pos, 0, quizCurrentId);
         }
-        history.push({ word: w.en, ok, ts: Date.now() });
+        history.push({ word: w.en, deckId: w.deckId, ok, ts: Date.now() });
         save();
         updateStats();
       }
+
       function checkMcq(btn, chosen, ca) {
         if (mcqLocked) return;
         mcqLocked = true;
@@ -1759,13 +2293,16 @@
           `<span class="${ok ? "result-ok" : "result-ng"}">${ok ? "✓ 정답! 사이클에서 제거됨" : "✗ 오답: " + ca + " — 다시 출제됩니다"}</span>`;
         setTimeout(nextQuiz, 1300);
       }
+
       function checkText() {
-        if (!words.length || quizIdx < 0) return;
+        if (!quizCurrentId) return;
         let inp = document.getElementById("quizInput");
         let ans = inp.value.trim();
         if (!ans) return;
+        let w = getWordById(quizCurrentId);
+        if (!w) return;
         let isKoEn = quizMode === 1;
-        let target = isKoEn ? words[quizIdx].en : words[quizIdx].ko;
+        let target = isKoEn ? w.en : w.ko;
         let cs = document.getElementById("optCaseSensitive").checked;
         let ok = cs
           ? ans === target
@@ -1776,68 +2313,72 @@
         inp.value = "";
         setTimeout(nextQuiz, 1100);
       }
+
+      // ★★★ FIXED showCycleComplete: does NOT touch cycleNum (startNewCycle handles it)
       function showCycleComplete() {
         document.getElementById("quizArea").style.display = "none";
         document.getElementById("cycleComplete").style.display = "";
         cycleCompleted++;
-        // cycleNum++ 여기서 하면 안 됨 — startNewCycle에서 해야 함
         document.getElementById("ccTitle").textContent =
-          `사이클 ${cycleNum} 완료!`;
+          `사이클 ${quizCycleNum} 완료!`;
         document.getElementById("ccSub").textContent =
           "모든 단어를 맞혔습니다 🎉";
-        document.getElementById("ccCorrect").textContent = cycleCorrect;
-        document.getElementById("ccWrong").textContent = cycleWrong;
-        let t = cycleCorrect + cycleWrong;
+        document.getElementById("ccCorrect").textContent = quizCorrect;
+        document.getElementById("ccWrong").textContent = quizWrong;
+        let t = quizCorrect + quizWrong;
         document.getElementById("ccAcc").textContent = t
-          ? Math.round((cycleCorrect / t) * 100) + "%"
+          ? Math.round((quizCorrect / t) * 100) + "%"
           : "—";
         save();
-        // cycleNum++ 제거
       }
 
-      function startNewCycle() {
-        if (!words.length) return;
-        cycleNum++; // 여기서 증가
-        cycleQueue = shuffle(words.map((_, i) => i));
-        cycleTotalStart = cycleQueue.length;
-        cycleCorrect = 0;
-        cycleWrong = 0;
-        document.getElementById("cycleComplete").style.display = "none";
-        document.getElementById("quizArea").style.display = "";
-        save();
-        nextQuiz(); // 큐가 채워진 후에 호출
+      // ── Stats ──────────────────────────────────
+      function updateStats() {
+        document.getElementById("stTotal").textContent = words.length;
+        document.getElementById("stDecks").textContent = decks.length;
+        document.getElementById("stCorrect").textContent = correct;
+        document.getElementById("stWrong").textContent = wrong;
+        let t = correct + wrong;
+        document.getElementById("stAcc").textContent = t
+          ? Math.round((correct / t) * 100) + "%"
+          : "—";
       }
 
-      // ── Stats panel
       function renderStats() {
         updateStats();
         let hl = document.getElementById("historyList");
         if (!history.length) {
-          hl.innerHTML = `<div style="text-align:center;color:var(--text3);padding:1rem;font-size:12px">기록 없음</div>`;
+          hl.innerHTML = '<div class="empty-state">기록 없음</div>';
         } else {
           hl.innerHTML = [...history]
             .reverse()
-            .slice(0, 60)
+            .slice(0, 80)
             .map((h) => {
               let d = new Date(h.ts);
               let time =
                 d.getHours().toString().padStart(2, "0") +
                 ":" +
                 d.getMinutes().toString().padStart(2, "0");
-              return `<div class="history-item"><span>${h.word}</span><span>${time}</span><span class="${h.ok ? "h-ok" : "h-ng"}">${h.ok ? "✓" : "✗"}</span></div>`;
+              let deck = h.deckId ? getDeckById(h.deckId) : null;
+              return `<div class="history-item">
+        <span>${h.word}</span>
+        <span style="color:var(--text3)">${deck ? deck.name : ""}</span>
+        <span>${time}</span>
+        <span class="${h.ok ? "h-ok" : "h-ng"}">${h.ok ? "✓" : "✗"}</span>
+      </div>`;
             })
             .join("");
         }
         let wsl = document.getElementById("wordStatsList");
         if (!words.length) {
-          wsl.innerHTML = `<div style="text-align:center;color:var(--text3);padding:1rem;font-size:12px">단어를 추가하세요</div>`;
+          wsl.innerHTML = '<div class="empty-state">단어를 추가하세요</div>';
           return;
         }
         let sorted = words
-          .map((w, i) => {
-            let s = wordStats[i] || { correct: 0, wrong: 0 };
+          .map((w) => {
+            let s = wordStats[w.id] || { correct: 0, wrong: 0 };
             let tot = s.correct + s.wrong;
-            return { ...w, i, s, acc: tot ? s.correct / tot : -1, tot };
+            return { ...w, s, acc: tot ? s.correct / tot : -1, tot };
           })
           .sort((a, b) => a.acc - b.acc);
         wsl.innerHTML = sorted
@@ -1851,9 +2392,13 @@
                   : w.acc < 0.8
                     ? "var(--amber)"
                     : "var(--green)";
+            let deck = getDeckById(w.deckId);
             return `<div class="word-item">
-      <span><span class="word-en">${w.en}</span><span class="word-ko">| ${w.ko}</span></span>
-      <div class="w-actions" style="gap:10px">
+      <div style="min-width:0;flex:1">
+        <div><span class="word-en">${w.en}</span><span class="word-ko">| ${w.ko}</span></div>
+        <div style="font-size:10px;color:var(--text3);font-family:var(--mono);margin-top:1px">${deck ? deck.name : ""}</div>
+      </div>
+      <div class="w-actions" style="gap:8px">
         <span style="font-family:var(--mono);font-size:12px;color:${ac}">${accStr}</span>
         <span style="font-family:var(--mono);font-size:11px;color:var(--text3)">${w.s.correct}/${w.tot}</span>
       </div>
@@ -1862,15 +2407,51 @@
           .join("");
       }
 
-      // ── Init
+      // ── Init ───────────────────────────────────
       load();
       setNewDiff(1);
+      renderDeckList();
+      renderWordDeckSelects();
+      renderWordFilterChips();
+      renderWordList();
+      renderFlashDeckChips();
       rebuildFlashPool();
-      renderList();
+      renderQuizDeckChips();
       updateCycleUI();
       updateStats();
-      if (words.length && !cycleQueue.length) startNewCycle();
-      else nextQuiz();
+
+      // Restore quiz UI state
+      if (quizQueue.length > 0 && quizCurrentId) {
+        // resume in progress
+        let w = getWordById(quizCurrentId);
+        if (w) {
+          let isKoEn = quizMode === 1 || quizMode === 3;
+          document.getElementById("quizLabel").textContent = isKoEn
+            ? "KOREAN"
+            : "ENGLISH";
+          document.getElementById("quizWord").textContent = isKoEn
+            ? w.ko
+            : w.en;
+          document.getElementById("quizTtsBtn").style.display = isKoEn
+            ? "none"
+            : "";
+          [0, 1, 2, 3].forEach((i) =>
+            document
+              .getElementById("qt" + i)
+              .classList.toggle("active", i === quizMode),
+          );
+          let isMcq = quizMode >= 2;
+          document.getElementById("mcqArea").style.display = isMcq
+            ? "grid"
+            : "none";
+          document.getElementById("textArea").style.display = isMcq
+            ? "none"
+            : "";
+          if (isMcq) renderMcq(isKoEn);
+        }
+      } else if (words.length && quizQueue.length === 0) {
+        initQuizQueue();
+      }
     </script>
   </body>
 </html>
