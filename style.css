@@ -64,7 +64,7 @@ body::before {
   font-weight: 700;
   letter-spacing: -0.03em;
   background: linear-gradient(135deg, #fff 30%, var(--accent2));
-  /* -webkit-background-clip: text; */
+  -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -348,6 +348,8 @@ select option {
   gap: 4px;
   align-items: center;
   flex-shrink: 0;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .status-dot {

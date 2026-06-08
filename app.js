@@ -29,8 +29,11 @@ let mcqLocked = false;
 // Flash state
 let flashDeckId = null; // null = all
 let flashFilter = 0;
+let flashStarFilter = false;
+let flashReverse = false;
 let flashPool = [];
 let flashPos = 0;
+let flashCurrentWord = null;
 let flashFlipped = false;
 
 // Word panel filter
@@ -125,6 +128,11 @@ function showPanel(id, btn) {
     .forEach((b) => b.classList.remove("active"));
   document.getElementById("panel-" + id).classList.add("active");
   if (btn) btn.classList.add("active");
+  else {
+    let navBtns = document.querySelectorAll(".nav-btn");
+    let idx = ["decks", "words", "flash", "quiz", "stats", "settings"].indexOf(id);
+    if (idx >= 0 && navBtns[idx]) navBtns[idx].classList.add("active");
+  }
   if (id === "decks") renderDeckList();
   if (id === "words") {
     renderWordDeckSelects();
@@ -143,24 +151,26 @@ function showPanel(id, btn) {
 }
 
 // ── TTS ────────────────────────────────────
-function speak(text) {
+function speak(text, lang) {
   if (!window.speechSynthesis) return;
+  lang = lang || "en-US";
   speechSynthesis.cancel();
   let u = new SpeechSynthesisUtterance(text);
-  u.lang = "en-US";
+  u.lang = lang;
   u.rate = +document.getElementById("ttsRate").value || 0.9;
-  speechSynthesis.speak(u);
+  u.onerror = (e) => {
+    if (e.error !== "canceled") console.warn("TTS error:", e.error);
+  };
+  setTimeout(() => speechSynthesis.speak(u), 30);
 }
 function speakFlash() {
-  let w = flashPool[flashPos];
-  if (w) speak(w.en);
+  if (flashCurrentWord) speak(flashCurrentWord.en);
 }
 function speakQuiz() {
   let w = getWordById(quizCurrentId);
   if (!w) return;
   let isKoEn = quizMode === 1 || quizMode === 3;
-  if (!isKoEn) speak(w.en);
-  else toast("한국어 TTS는 지원되지 않습니다");
+  speak(isKoEn ? w.ko : w.en, isKoEn ? "ko-KR" : "en-US");
 }
 
 // ── Helpers ────────────────────────────────
@@ -228,7 +238,9 @@ function deleteDeck(id) {
   words = words.filter((w) => w.deckId !== id);
   removed.forEach((wid) => delete wordStats[wid]);
   // clean quiz queue
+  let removedCount = quizQueue.filter((wid) => removed.includes(wid)).length;
   quizQueue = quizQueue.filter((wid) => !removed.includes(wid));
+  quizTotalStart = Math.max(0, quizTotalStart - removedCount);
   save();
   renderDeckList();
   renderWordDeckSelects();
@@ -254,14 +266,14 @@ function renderDeckList() {
       let tot = ws.reduce((s, w) => s + w.correct + w.wrong, 0);
       let cor = ws.reduce((s, w) => s + w.correct, 0);
       let acc = tot ? Math.round((cor / tot) * 100) + "%" : "—";
-      return `<div class="deck-row">
+      return `<div class="deck-row" onclick="showPanel('words');setWordFilter('${d.id}')">
       <div style="min-width:0">
         <div class="deck-name">${d.name}</div>
         <div class="deck-meta">${cnt}개 단어 · 정답률 ${acc}</div>
       </div>
       <div class="deck-actions">
-        <button class="btn btn-ghost btn-sm" onclick="renameDeck('${d.id}')">이름 변경</button>
-        <button class="btn btn-danger" onclick="deleteDeck('${d.id}')">삭제</button>
+        <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();renameDeck('${d.id}')">이름 변경</button>
+        <button class="btn btn-danger" onclick="event.stopPropagation();deleteDeck('${d.id}')">삭제</button>
       </div>
     </div>`;
     })
@@ -276,10 +288,6 @@ function renderWordDeckSelects() {
   let placeholder = decks.length ? "" : '<option value="">단어장 없음</option>';
   document.getElementById("wordDeckSel").innerHTML = placeholder + opts;
   document.getElementById("importDeckSel").innerHTML = placeholder + opts;
-}
-
-function onWordDeckChange() {
-  /* nothing needed */
 }
 
 // ── Word filter chips ──────────────────────
@@ -342,7 +350,7 @@ function addToQuizQueue(wid) {
   let w = getWordById(wid);
   if (!w) return;
   let active = quizDeckIds.length === 0 || quizDeckIds.includes(w.deckId);
-  if (active && quizQueue.length > 0) {
+  if (active) {
     let pos = Math.floor(Math.random() * quizQueue.length) + 1;
     quizQueue.splice(pos, 0, wid);
     quizTotalStart++;
@@ -352,10 +360,60 @@ function addToQuizQueue(wid) {
 function deleteWord(id) {
   words = words.filter((w) => w.id !== id);
   delete wordStats[id];
-  quizQueue = quizQueue.filter((wid) => wid !== id);
-  if (quizCurrentId === id) quizCurrentId = null;
+  if (quizQueue.includes(id)) {
+    quizQueue = quizQueue.filter((wid) => wid !== id);
+    quizTotalStart = Math.max(0, quizTotalStart - 1);
+  }
+  if (quizCurrentId === id) {
+    quizCurrentId = null;
+    if (document.getElementById("panel-quiz").classList.contains("active"))
+      nextQuiz();
+  }
   save();
   renderWordList();
+  updateCycleUI();
+}
+
+function editWord(id) {
+  let w = getWordById(id);
+  if (!w) return;
+  let en = prompt("영어 단어:", w.en);
+  if (en === null || !en.trim()) return;
+  let ko = prompt("한국어 뜻:", w.ko);
+  if (ko === null || !ko.trim()) return;
+  w.en = en.trim();
+  w.ko = ko.trim();
+  save();
+  renderWordList();
+  toast("단어 수정됨");
+}
+
+function moveWord(id) {
+  let w = getWordById(id);
+  if (!w) return;
+  if (decks.length < 2) {
+    toast("이동할 단어장이 없습니다");
+    return;
+  }
+  let msg = decks
+    .map((d, i) => `${i + 1}. ${d.name}${d.id === w.deckId ? " (현재)" : ""}`)
+    .join("\n");
+  let choice = prompt(`"${w.en}" 이동할 단어장 번호:\n${msg}`);
+  if (!choice) return;
+  let idx = parseInt(choice) - 1;
+  if (isNaN(idx) || idx < 0 || idx >= decks.length) {
+    toast("잘못된 번호입니다");
+    return;
+  }
+  if (decks[idx].id === w.deckId) {
+    toast("같은 단어장입니다");
+    return;
+  }
+  w.deckId = decks[idx].id;
+  save();
+  renderWordList();
+  renderWordFilterChips();
+  toast(`"${w.en}" → ${decks[idx].name} 이동됨`);
 }
 
 function toggleStar(id) {
@@ -409,6 +467,8 @@ function renderWordList() {
       <div class="w-actions">
         ${status}
         <span style="font-size:11px;color:${sc};font-family:var(--mono)">${stars}</span>
+        <button class="btn btn-ghost btn-sm" onclick="editWord('${w.id}')">수정</button>
+        <button class="btn btn-ghost btn-sm" onclick="moveWord('${w.id}')">이동</button>
         <button class="btn-icon" onclick="toggleStar('${w.id}')">${w.star ? "⭐" : "☆"}</button>
         <button class="btn btn-danger" onclick="deleteWord('${w.id}')">삭제</button>
       </div>
@@ -459,11 +519,17 @@ function importWords() {
   toast(`${added}개 단어 추가됨`);
 }
 
+function escCSV(s) {
+  return /[,"\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+}
+
 function exportCSV() {
   let lines = ["# WordMaster export", "# 단어장,영어,한국어"];
   words.forEach((w) => {
     let d = getDeckById(w.deckId);
-    lines.push(`${d ? d.name : ""},${w.en},${w.ko}`);
+    lines.push(
+      [escCSV(d ? d.name : ""), escCSV(w.en), escCSV(w.ko)].join(","),
+    );
   });
   copyText(lines.join("\n"), "CSV 복사됨");
 }
@@ -519,6 +585,7 @@ function importFromFile(event) {
     if (file.name.endsWith(".json")) {
       try {
         let data = JSON.parse(text);
+        let wordIdMap = {};
         // version 2 (multi-deck)
         if (data.version === 2 && data.decks) {
           let idMap = {};
@@ -535,33 +602,54 @@ function importFromFile(event) {
             } else idMap[d.id] = existing.id;
           });
           (data.words || []).forEach((w) => {
+            let en = (w.en || "").trim();
+            let ko = (w.ko || "").trim();
+            if (!en || !ko) return;
             let wid = genId();
+            wordIdMap[w.id] = wid;
             words.push({
               id: wid,
               deckId: idMap[w.deckId] || deckId,
-              en: w.en,
-              ko: w.ko,
+              en,
+              ko,
               star: w.star || false,
               diff: w.diff || 1,
             });
             addToQuizQueue(wid);
             added++;
           });
+          // restore per-word stats with new IDs
+          if (data.wordStats) {
+            Object.keys(data.wordStats).forEach((oldId) => {
+              let newId = wordIdMap[oldId];
+              if (newId) wordStats[newId] = data.wordStats[oldId];
+            });
+          }
         } else if (data.words) {
           // version 1 (single-deck, legacy)
           data.words.forEach((w) => {
+            let en = (w.en || "").trim();
+            let ko = (w.ko || "").trim();
+            if (!en || !ko) return;
             let wid = genId();
+            wordIdMap[w.id] = wid;
             words.push({
               id: wid,
-              deckId,
-              en: w.en,
-              ko: w.ko,
+              deckId: deckId,
+              en,
+              ko,
               star: w.star || false,
               diff: w.diff || 1,
             });
             addToQuizQueue(wid);
             added++;
           });
+          if (data.wordStats) {
+            Object.keys(data.wordStats).forEach((oldId) => {
+              let newId = wordIdMap[oldId];
+              if (newId) wordStats[newId] = data.wordStats[oldId];
+            });
+          }
         }
       } catch (e) {
         toast("JSON 파싱 오류");
@@ -574,7 +662,11 @@ function importFromFile(event) {
         .map((l) => l.trim())
         .filter(Boolean)
         .filter((l) => !l.startsWith("#"));
-      let hasDeckCol = lines[0] && lines[0].split(",").length >= 3;
+      let hasDeckCol =
+        lines[0] &&
+        (lines[0].includes("\t")
+          ? lines[0].split("\t").length >= 3
+          : lines[0].split(",").length >= 3);
       lines.forEach((line) => {
         let parts = line.includes("\t") ? line.split("\t") : line.split(",");
         if (hasDeckCol && parts.length >= 3) {
@@ -645,6 +737,7 @@ function clearAll() {
   quizCorrect = 0;
   quizWrong = 0;
   quizCurrentId = null;
+  flashCurrentWord = null;
   save();
   renderDeckList();
   renderWordDeckSelects();
@@ -704,8 +797,24 @@ function rebuildFlashPool() {
     ? words.filter((w) => w.deckId === flashDeckId)
     : words;
   if (flashFilter > 0) pool = pool.filter((w) => (w.diff || 1) === flashFilter);
+  if (flashStarFilter) pool = pool.filter((w) => w.star);
   flashPool = shuffle(pool);
   flashPos = 0;
+  flashCurrentWord = null;
+}
+
+function toggleFlashStar() {
+  flashStarFilter = !flashStarFilter;
+  document.getElementById("flashStarBtn").classList.toggle("active", flashStarFilter);
+  rebuildFlashPool();
+  nextFlash();
+}
+
+function toggleFlashReverse() {
+  flashReverse = !flashReverse;
+  document.getElementById("flashReverseBtn").classList.toggle("active", flashReverse);
+  rebuildFlashPool();
+  nextFlash();
 }
 
 function nextFlash() {
@@ -721,29 +830,34 @@ function nextFlash() {
   document.getElementById("flashcard").classList.remove("flipped");
   flashPos =
     ((flashPos % flashPool.length) + flashPool.length) % flashPool.length;
-  let w = flashPool[flashPos];
-  document.getElementById("fcWord").textContent = w.en;
-  document.getElementById("fcMeaning").textContent = w.ko;
+  flashCurrentWord = flashPool[flashPos];
+  document.getElementById("fcWord").textContent = flashReverse
+    ? flashCurrentWord.ko
+    : flashCurrentWord.en;
+  document.getElementById("fcMeaning").textContent = flashReverse
+    ? flashCurrentWord.en
+    : flashCurrentWord.ko;
   let sc =
-    w.diff === 3
+    flashCurrentWord.diff === 3
       ? "var(--red)"
-      : w.diff === 2
+      : flashCurrentWord.diff === 2
         ? "var(--amber)"
         : "var(--green)";
   document.getElementById("fcDiff").innerHTML =
-    `<span style="font-size:12px;color:${sc}">${"★".repeat(w.diff || 1)}</span>`;
-  let deck = getDeckById(w.deckId);
+    `<span style="font-size:12px;color:${sc}">${"★".repeat(flashCurrentWord.diff || 1)}</span>`;
+  let deck = getDeckById(flashCurrentWord.deckId);
   document.getElementById("fcDeckTag").innerHTML = deck
     ? `<span class="deck-tag">${deck.name}</span>`
     : "";
   document.getElementById("fcCounter").textContent =
     `${flashPos + 1} / ${flashPool.length}`;
   flashPos++;
-  if (document.getElementById("optAutoTTS").checked) speak(w.en);
+  if (document.getElementById("optAutoTTS").checked) speak(flashCurrentWord.en);
 }
 
 function prevFlash() {
-  flashPos = Math.max(0, flashPos - 2);
+  flashPos = flashPos - 2;
+  if (flashPos < 0) flashPos = Math.max(0, flashPool.length - 1);
   nextFlash();
 }
 
@@ -753,6 +867,17 @@ function flipCard() {
     .getElementById("flashcard")
     .classList.toggle("flipped", flashFlipped);
 }
+
+document.addEventListener("keydown", (e) => {
+  if (!document.getElementById("panel-flash").classList.contains("active"))
+    return;
+  if (e.key === "ArrowRight") nextFlash();
+  else if (e.key === "ArrowLeft") prevFlash();
+  else if (e.key === " " || e.key === "Space") {
+    e.preventDefault();
+    flipCard();
+  }
+});
 
 // ════════════════════════════════════════════
 // QUIZ + CYCLE  (BUG-FIXED)
@@ -864,7 +989,6 @@ function setQMode(m) {
   save();
 }
 
-// ★★★ FIXED nextQuiz: only show cycle complete if queue truly empty AND we're in quiz mode AND cycle complete not already showing
 function nextQuiz() {
   let pool = getQuizWords();
   if (!pool.length) {
@@ -872,23 +996,25 @@ function nextQuiz() {
     updateCycleUI();
     return;
   }
-  // Already showing cycle complete - don't call again
   if (document.getElementById("cycleComplete").style.display === "block") {
     return;
   }
-  // ★ KEY FIX: only show cycle complete if queue truly empty AND we're in quiz mode
   if (quizQueue.length === 0) {
     showCycleComplete();
     return;
   }
   mcqLocked = false;
-  quizCurrentId = quizQueue[0];
-  let w = getWordById(quizCurrentId);
-  if (!w) {
+  // iterative skip: avoid stack overflow from many deleted words
+  while (quizQueue.length > 0) {
+    quizCurrentId = quizQueue[0];
+    if (getWordById(quizCurrentId)) break;
     quizQueue.shift();
-    nextQuiz();
+  }
+  if (quizQueue.length === 0) {
+    showCycleComplete();
     return;
-  } // skip deleted words
+  }
+  let w = getWordById(quizCurrentId);
   let isKoEn = quizMode === 1 || quizMode === 3;
   document.getElementById("quizLabel").textContent = isKoEn
     ? "KOREAN"
@@ -964,7 +1090,7 @@ function checkMcq(btn, chosen, ca) {
     });
   recordResult(ok);
   document.getElementById("quizResult").innerHTML =
-    `<span class="${ok ? "result-ok" : "result-ng"}">${ok ? "✓ 정답! 사이클에서 제거됨" : "✗ 오답: " + ca + " — 다시 출제됩니다"}</span>`;
+    `<span class="${ok ? "result-ok" : "result-ng"}">${ok ? "✓ 정답! 사이클에서 제거됨" : "✗ 선택: " + chosen.replace(/</g, "&lt;") + " / 정답: " + ca + " — 다시 출제됩니다"}</span>`;
   setTimeout(nextQuiz, 1300);
 }
 
@@ -981,7 +1107,7 @@ function checkText() {
   let ok = cs ? ans === target : ans.toLowerCase() === target.toLowerCase();
   recordResult(ok);
   document.getElementById("quizResult").innerHTML =
-    `<span class="${ok ? "result-ok" : "result-ng"}">${ok ? "✓ 정답! 사이클에서 제거됨" : "✗ 오답: " + target + " — 다시 출제됩니다"}</span>`;
+    `<span class="${ok ? "result-ok" : "result-ng"}">${ok ? "✓ 정답! 사이클에서 제거됨" : "✗ 입력: " + ans.replace(/</g, "&lt;") + " / 정답: " + target + " — 다시 출제됩니다"}</span>`;
   inp.value = "";
   setTimeout(nextQuiz, 1100);
 }
@@ -1015,8 +1141,56 @@ function updateStats() {
     : "—";
 }
 
+function startWrongReview() {
+  let pool = words.filter((w) => {
+    let s = wordStats[w.id];
+    return s && s.wrong > 0;
+  });
+  if (!pool.length) {
+    toast("오답이 없습니다");
+    return;
+  }
+  quizDeckIds = [];
+  quizCycleNum = 1;
+  quizQueue = shuffle(pool.map((w) => w.id));
+  quizTotalStart = quizQueue.length;
+  quizCorrect = 0;
+  quizWrong = 0;
+  document.getElementById("cycleComplete").style.display = "none";
+  document.getElementById("quizArea").style.display = "";
+  renderQuizDeckChips();
+  save();
+  nextQuiz();
+  toast("오답 복습: " + pool.length + "개");
+}
+
+function renderDeckStats() {
+  let el = document.getElementById("deckStatsBreakdown");
+  if (!decks.length) {
+    el.innerHTML = '<div class="empty-state">단어장 없음</div>';
+    return;
+  }
+  el.innerHTML = decks
+    .map((d) => {
+      let ws = words
+        .filter((w) => w.deckId === d.id)
+        .map((w) => wordStats[w.id] || { correct: 0, wrong: 0 });
+      let cnt = ws.length;
+      let tot = ws.reduce((s, w) => s + w.correct + w.wrong, 0);
+      let cor = ws.reduce((s, w) => s + w.correct, 0);
+      let acc = tot ? Math.round((cor / tot) * 100) + "%" : "—";
+      return `<div class="stat-card">
+        <div class="stat-val" style="font-size:16px">${cnt}</div>
+        <div class="stat-label">${d.name}</div>
+        <div style="font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:4px">정답률 ${acc} (${cor}/${tot})</div>
+      </div>`;
+    })
+    .join("");
+}
+
 function renderStats() {
   updateStats();
+  renderDeckStats();
   let hl = document.getElementById("historyList");
   if (!history.length) {
     hl.innerHTML = '<div class="empty-state">기록 없음</div>';
@@ -1092,10 +1266,9 @@ updateCycleUI();
 updateStats();
 
 // Restore quiz UI state
-if (quizQueue.length > 0 && quizCurrentId) {
-  // resume in progress
-  let w = getWordById(quizCurrentId);
-  if (w) {
+if (quizQueue.length > 0) {
+  if (quizCurrentId && getWordById(quizCurrentId)) {
+    let w = getWordById(quizCurrentId);
     let isKoEn = quizMode === 1 || quizMode === 3;
     document.getElementById("quizLabel").textContent = isKoEn
       ? "KOREAN"
@@ -1111,6 +1284,8 @@ if (quizQueue.length > 0 && quizCurrentId) {
     document.getElementById("mcqArea").style.display = isMcq ? "grid" : "none";
     document.getElementById("textArea").style.display = isMcq ? "none" : "";
     if (isMcq) renderMcq(isKoEn);
+  } else {
+    nextQuiz();
   }
 } else if (words.length && quizQueue.length === 0) {
   initQuizQueue();

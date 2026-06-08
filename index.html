@@ -59,7 +59,7 @@
         <div class="card">
           <div class="card-label">단어 추가</div>
           <div class="row">
-            <select id="wordDeckSel" onchange="onWordDeckChange()"></select>
+            <select id="wordDeckSel"></select>
           </div>
           <div class="row">
             <input
@@ -177,6 +177,10 @@
               ★★★
             </button>
           </div>
+          <div class="diff-row" style="justify-content:space-between">
+            <button class="btn btn-ghost btn-sm" id="flashStarBtn" onclick="toggleFlashStar()">⭐ 전체</button>
+            <button class="btn btn-ghost btn-sm" id="flashReverseBtn" onclick="toggleFlashReverse()">영→한</button>
+          </div>
           <div class="flashcard-wrap">
             <div class="flashcard" id="flashcard" onclick="flipCard()">
               <div class="fc-face fc-front">
@@ -231,6 +235,9 @@
             id="quizDeckChips"
             style="margin-bottom: 12px"
           ></div>
+          <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+            <button class="btn btn-ghost btn-sm" onclick="startWrongReview()">🔄 오답 복습</button>
+          </div>
 
           <div class="cycle-bar">
             <div class="cycle-info">
@@ -363,6 +370,10 @@
           <div class="history-list" id="historyList">
             <div class="empty-state">기록 없음</div>
           </div>
+        </div>
+        <div class="card">
+          <div class="card-label">단어장별 통계</div>
+          <div class="stats-grid" id="deckStatsBreakdown"></div>
         </div>
         <div class="card">
           <div class="card-label">단어별 정답률 (낮은 순)</div>
